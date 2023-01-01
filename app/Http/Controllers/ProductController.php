@@ -21,7 +21,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         if($request->photo!=""){
             $strpos = strpos($request->photo, ';');
-            $sub = substr(request->photo,0,$strpos);
+            $sub = substr($request->photo,0,$strpos);
             $ex = explode("/",$sub)[1];
             $name = time().".".$ex;
             $img = Image::make($request->photo)->resize(200, 200);

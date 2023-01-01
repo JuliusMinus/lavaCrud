@@ -1,5 +1,4 @@
 <script setup>
-
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -9,7 +8,6 @@ let products = ref([]);
 
 onMounted(async () => {
   getProducts();
- 
 });
 
 const getProducts = async () => {
@@ -39,7 +37,8 @@ const deleteProduct = (id) => {
     confirmButtonText: "Yes, delete it !",
   }).then((result) => {
     if (result.value) {
-      axios.get("/api/delete_product/" + id)
+      axios
+        .get("/api/delete_product/"+id)
         .then(() => {
           Swal.fire("Delete", "product delete successfully", "success");
 

@@ -1,43 +1,39 @@
 <script setup>
-
-
-
-import { onMounted, ref } from "vue"
-import {useRouter} from 'vue-router'
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 let form = ref({
-  id:"",
+  id: "",
   name: "",
   description: "",
   photo: "",
   type: "",
   quantity: "",
   price: "",
-
-})
+});
 
 onMounted(async () => {
-  getsingleProduct()
-})
+  getsingleProduct();
+});
 
 const props = defineProps({
-  id:{
-  type:String,
-  default:''
-  }
-})
+  id: {
+    type: String,
+    default: "",
+  },
+});
 
-const router = useRouter()
+const router = useRouter();
 const getPhoto = () => {
   let photo = "/upload/image.png";
   if (form.value.photo) {
     if (form.value.photo.indexOf("base64") != -1) {
       photo = form.value.photo;
     } else {
-      photo = "/upload/" +form.value.photo;
+      photo = "/upload/" + form.value.photo;
     }
   }
-  return photo
+  return photo;
 };
 
 const updatePhoto = (e) => {
@@ -53,15 +49,12 @@ const updatePhoto = (e) => {
   reader.readAsDataURL(file);
 };
 
-
 const getsingleProduct = async () => {
-
-  let response = await axios.get(`/api/get_edit-product/${props.id}`)
-  form.value = response.data.product
-}
+  let response = await axios.get(`/api/get_edit_product/${props.id}`);
+  form.value = response.data.product;
+};
 
 const updateProduct = () => {
-  
   const formData = new FormData();
   formData.append("name", form.value.name);
   formData.append("description", form.value.description);
@@ -70,32 +63,23 @@ const updateProduct = () => {
   formData.append("quantity", form.value.quantity);
   formData.append("price", form.value.price);
 
-  axios.post(`/api/update_product/${form.value/id}`, formData)
-  .then((response) => {
-    form.value.name = "",
-      form.value.description = "",
-      form.value.photo = "",
-      form.value.type = "",
-      form.value.quantity = "",
-      form.value.price = "",
+  axios.post(`/api/update_product/${props.id}`, formData)
+    .then((response) => {
+      (form.value.name = ""),
+        (form.value.description = ""),
+        (form.value.photo = ""),
+        (form.value.type = ""),
+        (form.value.quantity = ""),
+        (form.value.price = ""),
+        router.push("/");
 
-      router.push('/') 
-      
       toast.fire({
-
-        icon:"success",
-        title:"Product update successfully"
-      })
-  })
-  .catch((error) => {
-
-  })
-
-
-} 
-
-
-
+        icon: "success",
+        title: "Product update successfully",
+      });
+    })
+    .catch((error) => {});
+};
 </script>
 
 
@@ -119,7 +103,9 @@ const updateProduct = () => {
           <h1 class="my-1">Edit Product</h1>
         </div>
         <div class="products__create__titlebar--item">
-          <button class="btn btn-secondary ml-1" @click="updateProduct()">Save</button>
+          <button class="btn btn-secondary ml-1" @click="updateProduct()">
+            Save
+          </button>
         </div>
       </div>
 
@@ -127,10 +113,15 @@ const updateProduct = () => {
         <div class="products__create__main">
           <div class="products__create__main--addInfo card py-2 px-2 bg-white">
             <p class="mb-1">Name</p>
-            <input type="text" class="input" v-model="form.name">
+            <input type="text" class="input" v-model="form.name" />
 
             <p class="my-1">Description (optional)</p>
-            <textarea cols="10" rows="5" class="textarea" v-model="form.description"></textarea>
+            <textarea
+              cols="10"
+              rows="5"
+              class="textarea"
+              v-model="form.description"
+            ></textarea>
 
             <div class="products__create__main--media--images mt-2">
               <ul
@@ -146,9 +137,10 @@ const updateProduct = () => {
                     "
                   >
                     <img
-                      class="products__create__main--media--images--item--img" :src="getPhoto()"
-                    >
-                  </div> 
+                      class="products__create__main--media--images--item--img"
+                      :src="getPhoto()"
+                    />
+                  </div>
                 </li>
 
                 <!-- upload image small -->
@@ -168,8 +160,9 @@ const updateProduct = () => {
                         products__create__main--media--images--item--form--input
                       "
                       type="file"
-                      id="myfile" @change="updatePhoto"
-                    >
+                      id="myfile"
+                      @change="updatePhoto"
+                    />
                   </form>
                 </li>
               </ul>
@@ -182,21 +175,21 @@ const updateProduct = () => {
             <!-- Product unit -->
             <div class="my-3">
               <p>Product type</p>
-              <input type="text" class="input" v-model="form.type">
+              <input type="text" class="input" v-model="form.type" />
             </div>
             <hr />
 
             <!-- Product invrntory -->
             <div class="my-3">
               <p>Inventory</p>
-              <input type="text" class="input" v-model="form.quantity">
+              <input type="text" class="input" v-model="form.quantity" />
             </div>
             <hr />
 
             <!-- Product Price -->
             <div class="my-3">
               <p>Price</p>
-              <input type="text" class="input" v-model="form.type">
+              <input type="text" class="input" v-model="form.type" />
             </div>
           </div>
         </div>
